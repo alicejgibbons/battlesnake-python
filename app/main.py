@@ -1,7 +1,7 @@
 import bottle
 import os
 import random
-
+# ALICE, COURT, AND ROWANS SASSY SNAKE !!!!!!!!!!
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -21,6 +21,7 @@ def start():
     )
 
     # TODO: Do things with data
+
 
     return {
         'color': '#00FF00',
