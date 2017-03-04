@@ -14,11 +14,7 @@ class Board:
         for f in food:
             self.game_board[f[1]+1][f[0]+1] = 'f'
 
-    def updateBoard(self, coords, snake_num):
-        for c in coords:
-            self.game_board[c[1]+1][c[0]+1] = snake_num
-
-    def putSnakesOnBoard(self, data, board):
+    def putSnakesOnBoard(self, data):
         our_id = data['you']
         snakes = data['snakes']
         snake_num = 1
@@ -27,10 +23,11 @@ class Board:
             if snake['id'] == our_id:
                 our_snake_num = snake_num
                 our_snake_coords = snake['coords']
-            board.updateBoard(snake['coords'], snake_num)
+            for c in snake['coords']:
+                self.game_board[c[1]+1][c[0]+1] = snake_num
             snake_num = snake_num + 1
 
-        return our_snake_num, board, our_snake_coords
+        return our_snake_num, our_snake_coords
 
     def __init__(self):
         self.game_board = [[0]*22 for i in range(22)]
@@ -39,6 +36,26 @@ class Board:
         for i in range(22):
             self.game_board[i][0] = -1
             self.game_board[i][21] = -1
+
+def findNextMove(board, our_snake_coords):
+    our_snake_head = our_snake_coords[0]
+    new_dir_list = []
+
+    equal_list = [0, 'f']
+
+    if board[our_snake_head[1]+2][our_snake_head[0]+1] in equal_list:
+        new_dir_list.append('down')
+
+    if board[our_snake_head[1]][our_snake_head[0]+1] in equal_list:
+        new_dir_list.append('up')
+
+    if board[our_snake_head[1]+1][our_snake_head[0]+2] in equal_list:
+        new_dir_list.append('right')
+
+    if board[our_snake_head[1]+1][our_snake_head[0]] in equal_list:
+        new_dir_list.append('left')
+
+    return new_dir_list
 
 
 @bottle.route('/static/<path:path>')
@@ -79,14 +96,18 @@ def move():
 
     board = Board()
     
-    our_snake_num, newBoard, our_snake_coords = board.putSnakesOnBoard(data, board)
+    our_snake_num, our_snake_coords = board.putSnakesOnBoard(data)
 
     board.putFoodOnBoard(food)
-    board.printBoard(newBoard.game_board)
+    board.printBoard(board.game_board)
+
+    next_dir_list = findNextMove(board.game_board, our_snake_coords)
+    print "next direction list is = ", next_dir_list
+
 
 
     return {
-        'move': 'up',
+        'move': random.choice(next_dir_list),
         'taunt': 'battlesnake-python!'
     }
 
