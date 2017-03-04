@@ -171,14 +171,16 @@ def move():
     dir_to_food_list = directionToFood(board.game_board, our_snake_coords[0], food[0])
     print "possible directions to food are = ", dir_to_food_list
 
+    dir_list = filterMoves(next_dir_list, dir_to_food_list)
+
     return {
-        'move': random.choice(next_dir_list),
+        'move': random.choice(dir_list),
         'taunt': 'battlesnake-python!'
     }
 
-# def filterMoves(next_dir_list, dir_to_food_list):
-#    for dir in next_dir_list:
-#        if dir.attribute==value: yield el
+def filterMoves(next_dir_list, dir_to_food_list):
+    dirs = filter(lambda s: s in dir_to_food_list, next_dir_list)
+    return dirs
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
