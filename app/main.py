@@ -4,6 +4,10 @@ import random
 # ALICE, COURT, AND ROWANS SASSY SNAKE !!!!!!!!!!
 
 class Board:
+    def putFoodOnBoard(self, food):
+        for f in food:
+            self.game_board[f[1]][f[0]] = 'f'
+
     def updateBoard(self, coords):
         for c in coords:
             self.game_board[c[1]][c[0]] = 1
@@ -55,10 +59,17 @@ def move():
     coords = our_snake['coords']
     print coords
     
+    print "SNAKE FOOD"
+    food = data['food']
+    print food
+
     board = Board()
-    printBoard(board.game_board)
+    #printBoard(board.game_board)
     
     board.updateBoard(coords)
+    printBoard(board.game_board)
+
+    board.putFoodOnBoard(food)
     printBoard(board.game_board)
 
     # find if we are at the edge of the board
