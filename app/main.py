@@ -57,6 +57,26 @@ def findNextMove(board, our_snake_coords):
 
     return new_dir_list
 
+def bfs(board, start):
+    visited, queue = [], [start]
+    while queue:
+        vertex = queue.pop(0)
+        print "popped from queue = board[",vertex[0],"][",vertex[1],"]"
+        vertex_value = board[vertex[0]][vertex[1]]
+        print "vertex_value = ", vertex_value
+        if vertex_value == 'f':
+            return visited
+        if vertex not in visited and vertex_value == 0:
+            visited.append(vertex)
+            vertex_list = [[vertex[0]+1,vertex[1]], [vertex[0]-1,vertex[1]], [vertex[0],vertex[1]+1], [vertex[0],vertex[1]-1]]
+            for child in vertex_list:
+                if child not in visited:
+                    queue.append(child)
+            
+            #queue.extend(board[vertex] - visited)
+
+    return visited
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -88,6 +108,8 @@ def move():
     data = bottle.request.json
     food = data['food']
 
+    print "data is ",data
+
     directions = ['up', 'down', 'left', 'right']
 
     ########## TESTER SNAKE ##########
@@ -99,15 +121,59 @@ def move():
     our_snake_num, our_snake_coords = board.putSnakesOnBoard(data)
 
     board.putFoodOnBoard(food)
-    board.printBoard(board.game_board)
+    # board.printBoard(board.game_board)
 
     next_dir_list = findNextMove(board.game_board, our_snake_coords)
     print "next direction list is = ", next_dir_list
 
+    print "our snake coords = ", our_snake_coords
+
+    our_head_coords = our_snake_coords[0]
+
+    up_list = []
+    down_list = []
+    right_list =[]
+    left_list = []
+
+    lists = { 'up': None, 'down': None, 'right': None, 'left': None}
+    shortest_list = {'move':None, 'l':None}
+    for i in range(len(next_dir_list)):
+        if 'up' in next_dir_list:
+            lists['up'] = bfs(board.game_board, [our_head_coords[0]+2, our_head_coords[1]+1])
+            shortest_list['move'] = 'up'
+            shortest_list['l'] = lists['up']
+        if 'down' in next_dir_list:
+            lists['down'] = bfs(board.game_board, [our_head_coords[0], our_head_coords[1]+1])
+            shortest_list['move'] = 'down'
+            shortest_list['l'] = lists['down']
+        if 'right' in next_dir_list:
+            lists['right'] = bfs(board.game_board, [our_head_coords[0]+1, our_head_coords[1]+2])
+            shortest_list['move'] = 'right'
+            shortest_list['l'] = lists['right']
+        if 'left' in next_dir_list:
+            lists['left'] = bfs(board.game_board, [our_head_coords[0]+1, our_head_coords[1]])
+            shortest_list['move'] = 'left'
+            shortest_list['l'] = lists['left']
+    
+    print "len up list = ", lists['up']
+    print "len down list = ", lists['down']
+    print "len right_list list = ", lists['right']
+    print "len left list = ",  lists['left'] 
+
+    for k,v in lists.iteritems():
+        #print len(v) 
+        if v and len(v) < len(shortest_list['l']):
+            print "LIST: ", k, len(v)
+            shortest_list['move'] = k
+            shortest_list['l'] = v
+            #print shortest_list
+    #print shortest_list
+    print "shortest_list LENGTH:",  len(shortest_list['l'])
+    print "shortest_list MOVE",  shortest_list['move']
 
 
     return {
-        'move': random.choice(next_dir_list),
+        'move': shortest_list['move'],
         'taunt': 'battlesnake-python!'
     }
 
