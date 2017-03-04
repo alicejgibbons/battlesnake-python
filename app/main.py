@@ -9,7 +9,12 @@ class Board:
             self.game_board[c[1]][c[0]] = 1
 
     def __init__(self):
-        self.game_board = [[0]*20 for i in range(20)]
+        self.game_board = [[0]*22 for i in range(22)]
+        self.game_board[0] = [-1] * 22
+        self.game_board[21] = [-1] * 22
+        for i in range(22):
+            self.game_board[i][0] = -1
+            self.game_board[i][21] = -1
 
 
 @bottle.route('/static/<path:path>')
@@ -28,9 +33,7 @@ def start():
         bottle.request.urlparts.scheme,
         bottle.request.urlparts.netloc
     )
-
     # TODO: Do things with data
-
 
     return {
         'color': '#00FF00',
@@ -61,8 +64,6 @@ def move():
     board.updateBoard(coords)
     printBoard(board.game_board)
 
-    # find if we are at the edge of the board
-   #atBoardEdge(data['coords'])
 
     return {
         'move': 'up',
@@ -83,9 +84,6 @@ def printBoard(board):
     print "BOARD STATE"
     for row in board:
         print row
-
-#def atBoardEdge(coords):
-
 
 
 # Expose WSGI app (so gunicorn can find it)
