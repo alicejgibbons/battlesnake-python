@@ -7,11 +7,11 @@ class Board:
 
     def putFoodOnBoard(self, food):
         for f in food:
-            self.game_board[f[1]][f[0]] = 'f'
+            self.game_board[f[1]+1][f[0]+1] = 'f'
 
-    def updateBoard(self, coords):
+    def updateBoard(self, coords, snake_num):
         for c in coords:
-            self.game_board[c[1]][c[0]] = snake_num
+            self.game_board[c[1]+1][c[0]+1] = snake_num
 
     def putSnakesOnBoard(self, data, board):
         our_id = data['you']
@@ -64,6 +64,7 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
+    food = data['food']
 
     directions = ['up', 'down', 'left', 'right']
 
