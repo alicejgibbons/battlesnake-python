@@ -57,6 +57,36 @@ def findNextMove(board, our_snake_coords):
 
     return new_dir_list
 
+def directionToMiddle(board, our_snake_coords):
+
+    dir_to_middle_list = []
+    mid_coords = [9, 9]
+
+    snake_x_coord = int(our_snake_coords[0])
+    snake_y_coord = int(our_snake_coords[1])
+    middl_x_coord = int(mid_coords[0])
+    middl_y_coord = int(mid_coords[1])
+
+    if snake_x_coord == middl_x_coord:
+        dir_to_middle_list.append('none')
+
+    if snake_x_coord < middl_x_coord:
+        dir_to_middle_list.append('right')
+
+    if snake_x_coord > middl_x_coord:
+        dir_to_middle_list.append('left')
+
+    if snake_y_coord == middl_y_coord:
+        dir_to_middle_list.append('none')
+
+    if snake_y_coord < middl_y_coord:
+        dir_to_middle_list.append('down')
+
+    if snake_y_coord > middl_y_coord:
+        dir_to_middle_list.append('up')
+
+    return dir_to_middle_list
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -101,16 +131,17 @@ def move():
     board.putFoodOnBoard(food)
     board.printBoard(board.game_board)
 
+
     next_dir_list = findNextMove(board.game_board, our_snake_coords)
     print "next direction list is = ", next_dir_list
 
-
+    dir_to_middle_list = directionToMiddle(board.game_board, our_snake_coords[0])
+    print "directions to middle are = ", dir_to_middle_list
 
     return {
         'move': random.choice(next_dir_list),
         'taunt': 'battlesnake-python!'
     }
-
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
