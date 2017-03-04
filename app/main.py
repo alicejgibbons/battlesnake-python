@@ -136,7 +136,7 @@ def start():
     # TODO: Do things with data
 
     return {
-        'color': '#00FF00',
+        'color': '#E579E0',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': head_url,
         'name': 'battlesnake-python'
@@ -175,6 +175,10 @@ def move():
         'move': random.choice(next_dir_list),
         'taunt': 'battlesnake-python!'
     }
+
+def filterMoves(next_dir_list, dir_to_food_list):
+   for dir in next_dir_list:
+       if dir.attribute==value: yield el
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
