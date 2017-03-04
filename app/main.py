@@ -5,7 +5,7 @@ import random
 
 class Board:
 
-    def printBoard(board):
+    def printBoard(self, board):
         print "BOARD STATE"
         for row in board:
             print row
@@ -26,10 +26,11 @@ class Board:
         for snake in snakes:
             if snake['id'] == our_id:
                 our_snake_num = snake_num
+                our_snake_coords = snake['coords']
             board.updateBoard(snake['coords'], snake_num)
             snake_num = snake_num + 1
 
-        return our_snake_num, board
+        return our_snake_num, board, our_snake_coords
 
     def __init__(self):
         self.game_board = [[0]*22 for i in range(22)]
@@ -77,14 +78,12 @@ def move():
     # testSnake.append({u'health_points': 100, u'taunt': u'92541496-7432-43c4-bed9-50584903a1f2 (20x20)', u'coords': [[2, 15], [2, 16], [2, 17]], u'name': u'battlesnake-python', u'id': u'4efdeb3d-8dd28-862a-6d139d23994f'})
 
     board = Board()
-    #printBoard(board.game_board)
     
-    our_snake_num, newBoard = board.putSnakesOnBoard(data, board)
-
-    printBoard(newBoard.game_board)
+    our_snake_num, newBoard, our_snake_coords = board.putSnakesOnBoard(data, board)
 
     board.putFoodOnBoard(food)
-    printBoard(board.game_board)
+    board.printBoard(newBoard.game_board)
+
 
     return {
         'move': 'up',
