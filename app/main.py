@@ -5,6 +5,11 @@ import random
 
 class Board:
 
+    def printBoard(board):
+        print "BOARD STATE"
+        for row in board:
+            print row
+
     def putFoodOnBoard(self, food):
         for f in food:
             self.game_board[f[1]+1][f[0]+1] = 'f'
@@ -39,7 +44,6 @@ class Board:
 def static(path):
     return bottle.static_file(path, root='static/')
 
-
 @bottle.post('/start')
 def start():
     data = bottle.request.json
@@ -51,6 +55,7 @@ def start():
         bottle.request.urlparts.scheme,
         bottle.request.urlparts.netloc
     )
+
     # TODO: Do things with data
 
     return {
@@ -60,14 +65,12 @@ def start():
         'name': 'battlesnake-python'
     }
 
-
 @bottle.post('/move')
 def move():
     data = bottle.request.json
     food = data['food']
 
     directions = ['up', 'down', 'left', 'right']
-
 
     ########## TESTER SNAKE ##########
     # testSnake = data['snakes']
@@ -87,11 +90,6 @@ def move():
         'move': 'up',
         'taunt': 'battlesnake-python!'
     }
-
-def printBoard(board):
-    print "BOARD STATE"
-    for row in board:
-        print row
 
 
 # Expose WSGI app (so gunicorn can find it)
