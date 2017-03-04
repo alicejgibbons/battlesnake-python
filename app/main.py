@@ -4,7 +4,12 @@ import random
 # ALICE, COURT, AND ROWANS SASSY SNAKE !!!!!!!!!!
 
 class Board:
-    def updateBoard(self, coords, snake_num):
+
+    def putFoodOnBoard(self, food):
+        for f in food:
+            self.game_board[f[1]][f[0]] = 'f'
+
+    def updateBoard(self, coords):
         for c in coords:
             self.game_board[c[1]][c[0]] = snake_num
 
@@ -22,9 +27,12 @@ class Board:
         return our_snake_num, board
 
     def __init__(self):
-        self.game_board = [[0]*20 for i in range(20)]
-
-
+        self.game_board = [[0]*22 for i in range(22)]
+        self.game_board[0] = [-1] * 22
+        self.game_board[21] = [-1] * 22
+        for i in range(22):
+            self.game_board[i][0] = -1
+            self.game_board[i][21] = -1
 
 
 @bottle.route('/static/<path:path>')
@@ -43,9 +51,7 @@ def start():
         bottle.request.urlparts.scheme,
         bottle.request.urlparts.netloc
     )
-
     # TODO: Do things with data
-
 
     return {
         'color': '#00FF00',
@@ -61,17 +67,20 @@ def move():
 
     directions = ['up', 'down', 'left', 'right']
 
+
     ########## TESTER SNAKE ##########
     # testSnake = data['snakes']
     # testSnake.append({u'health_points': 100, u'taunt': u'92541496-7432-43c4-bed9-50584903a1f2 (20x20)', u'coords': [[2, 15], [2, 16], [2, 17]], u'name': u'battlesnake-python', u'id': u'4efdeb3d-8dd28-862a-6d139d23994f'})
 
     board = Board()
-    printBoard(board.game_board)
+    #printBoard(board.game_board)
     
     our_snake_num, newBoard = board.putSnakesOnBoard(data, board)
 
     printBoard(newBoard.game_board)
 
+    board.putFoodOnBoard(food)
+    printBoard(board.game_board)
 
     return {
         'move': 'up',
