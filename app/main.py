@@ -87,6 +87,35 @@ def directionToMiddle(board, our_snake_coords):
 
     return dir_to_middle_list
 
+def directionToFood(board, our_snake_coords, food):
+
+    dir_to_food_list = []
+
+    snake_x_coord = int(our_snake_coords[0])
+    snake_y_coord = int(our_snake_coords[1])
+    food_x_coord = int(food[0])
+    food_y_coord = int(food[1])
+
+    if snake_x_coord == food_x_coord:
+        dir_to_food_list.append('none')
+
+    if snake_x_coord < food_x_coord:
+        dir_to_food_list.append('right')
+
+    if snake_x_coord > food_x_coord:
+        dir_to_food_list.append('left')
+
+    if snake_y_coord == food_y_coord:
+        dir_to_food_list.append('none')
+
+    if snake_y_coord < food_y_coord:
+        dir_to_food_list.append('down')
+
+    if snake_y_coord > food_y_coord:
+        dir_to_food_list.append('up')
+
+    return dir_to_food_list
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -137,6 +166,10 @@ def move():
 
     dir_to_middle_list = directionToMiddle(board.game_board, our_snake_coords[0])
     print "directions to middle are = ", dir_to_middle_list
+
+    #Just sending in the first piece of food for now.
+    dir_to_food_list = directionToFood(board.game_board, our_snake_coords[0], food[0])
+    print "possible directions to food are = ", dir_to_food_list
 
     return {
         'move': random.choice(next_dir_list),
