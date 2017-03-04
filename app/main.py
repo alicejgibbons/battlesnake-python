@@ -44,6 +44,8 @@ def start():
 def move():
     data = bottle.request.json
 
+    me_snake = idCheck(data)
+
     # TODO: Do things with data
     directions = ['up', 'down', 'left', 'right']
 
@@ -67,6 +69,15 @@ def move():
         'taunt': 'battlesnake-python!'
     }
 
+def idCheck(data):
+    our_id = data['you']
+    snakes = data['snakes']
+
+    for snake in snakes:
+        if snake['id'] == our_id:
+            return {
+                'ignore_me': snake
+            }
 
 def printBoard(board):
     print "BOARD STATE"
