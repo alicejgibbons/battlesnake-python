@@ -30,12 +30,12 @@ class Board:
         return our_snake_num, our_snake_coords
 
     def __init__(self):
-        self.game_board = [[0]*22 for i in range(22)]
-        self.game_board[0] = [-1] * 22
-        self.game_board[21] = [-1] * 22
-        for i in range(22):
+        self.game_board = [[0]*17 for i in range(17)]
+        self.game_board[0] = [-1] * 17
+        self.game_board[16] = [-1] * 17
+        for i in range(17):
             self.game_board[i][0] = -1
-            self.game_board[i][21] = -1
+            self.game_board[i][16] = -1
 
 class Coordinates:
     """
