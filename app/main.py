@@ -335,7 +335,7 @@ def move():
         
     return {
         'move': new_move,
-        'taunt': 'battlesnake-python!'
+        'taunt': 'H E R O K U  S H A F T S !'
     }
 
 def filterMoves(next_dir_list, dir_to_food_list):
