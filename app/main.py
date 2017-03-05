@@ -253,7 +253,7 @@ def start():
         'color': '#E579E0',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': head_url,
-        'name': 'battlesnake-python'
+        'name': 'H E R O K U  S H A F T S ! '
     }
 
 @bottle.post('/move')
@@ -335,7 +335,7 @@ def move():
         
     return {
         'move': new_move,
-        'taunt': 'H E R O K U  S H A F T S !'
+        'taunt': 'Y E S D A D D Y'
     }
 
 def filterMoves(next_dir_list, dir_to_food_list):
